@@ -1,25 +1,55 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             title: Text('annpinchuk'),
-            actions: const [
-              Padding(
-                padding: EdgeInsets.all(7.0),
-                child: Icon(Icons.add_box_outlined),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add_box_outlined),
+                onPressed: () {},
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(7, 7, 20, 7),
-                child: Icon(Icons.menu),
+              IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  _scaffoldKey.currentState!.openEndDrawer();
+                },
               ),
             ],
+          ),
+          endDrawer: Drawer(
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.symmetric(vertical: 25),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Settings'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: const Text('Archive'),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: const Icon(Icons.bookmark_border_sharp),
+                  title: const Text('Saved'),
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -30,16 +60,20 @@ class ProfilePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('images/foto1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                          shape: BoxShape.circle,
+                      InkWell(
+                        child: Hero(
+                          tag: "avatar",
+                          child: ProfileAvatar(),
                         ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                return StoryScreen();
+                              },
+                            ),
+                          );
+                        },
                       ),
                       Expanded(
                         child: Row(
@@ -49,7 +83,8 @@ class ProfilePage extends StatelessWidget {
                               children: const [
                                 Text('125',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20)),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)),
                                 Text('Posts')
                               ],
                             ),
@@ -57,7 +92,8 @@ class ProfilePage extends StatelessWidget {
                               children: const [
                                 Text('235',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20)),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)),
                                 Text('Followers')
                               ],
                             ),
@@ -65,7 +101,8 @@ class ProfilePage extends StatelessWidget {
                               children: const [
                                 Text('112',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20)),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)),
                                 Text('Following')
                               ],
                             ),
@@ -76,7 +113,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: ProfileDescription(),
                 ),
                 Padding(
@@ -103,16 +141,17 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10.0),
                   child: Row(
                     children: const [
                       StoryWidget(image: 'images/foto2.jpg', storyName: 'kyiv'),
-                      StoryWidget(image: 'images/foto3.jpg', storyName: 'moments'),
+                      StoryWidget(
+                          image: 'images/foto3.jpg', storyName: 'moments'),
                     ],
                   ),
                 ),
-                TabBar(tabs: [
+                const TabBar(tabs: [
                   Tab(
                     icon: Icon(Icons.grid_on),
                   ),
@@ -120,58 +159,179 @@ class ProfilePage extends StatelessWidget {
                     icon: Icon(Icons.portrait_outlined),
                   )
                 ]),
-                // Expanded(child: TabBarView(
-                //   children: [
-                //     Center(child: Text('Tagged photos'),),
-                //   ],
-                // ))
                 Column(children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('images/foto1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: const [
+                        InstaPost(image: 'images/foto7.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto5.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto6.jpg'),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('images/foto1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: const [
+                        InstaPost(image: 'images/foto8.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto9.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto4.jpg'),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('images/foto1.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: const [
+                        InstaPost(image: 'images/foto7.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto5.jpg'),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
+                        InstaPost(image: 'images/foto6.jpg'),
+                      ],
+                    ),
                   ),
                 ])
               ],
             ),
           )),
+    );
+  }
+}
+
+class StoryScreen extends StatelessWidget {
+  const StoryScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Image.asset(
+              "images/foto5.jpg",
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              alignment: Alignment.center,
+            ),
+            Container(
+              height: 80,
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withAlpha(220),
+                    Colors.black.withAlpha(10),
+                  ],
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Hero(
+                        tag: 'avatar',
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: AssetImage('images/foto1.jpg'),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Text(
+                        'annpinchuk',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Expanded(child: Text('5h')),
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 10,
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 3)
+        ],
+      ),
+      child: CircleAvatar(
+        radius: 50,
+        backgroundImage: AssetImage('images/story.png'),
+        child: CircleAvatar(
+          radius: 44,
+          backgroundImage: AssetImage('images/foto1.jpg'),
+        ),
+      ),
+    );
+  }
+}
+
+class InstaPost extends StatelessWidget {
+  final String image;
+
+  const InstaPost({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: InkWell(
+            onTap: (){},
+            child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -240,7 +400,7 @@ class StoryWidget extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(storyName),
         ],
       ),
