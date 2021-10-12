@@ -351,6 +351,7 @@ class ProfileDescription extends StatelessWidget {
           child: Text(
             'Anya Pinchuk',
             style: TextStyle(fontWeight: FontWeight.bold),
+            textScaleFactor: 1.1,
           ),
         ),
         const Text(
