@@ -118,15 +118,10 @@ class ProfilePage extends StatelessWidget {
                   child: ProfileDescription(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          child: const Text('Edit profile'),
-                        ),
-                      )
+                      ProfileButton(name: 'Edit profile'),
                     ],
                   ),
                 ),
