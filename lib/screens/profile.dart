@@ -1,9 +1,23 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:lab2/model/post_data.dart';
+import 'package:lab2/widgets/posts.dart';
+import 'package:lab2/widgets/saved_posts.dart';
+
+import '../widgets/liked_posts.dart';
 
 class ProfilePage extends StatelessWidget {
+  final List<PostData> savedPosts;
+  final ValueChanged<PostData> addPost;
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  ProfilePage({
+    Key? key,
+    required this.savedPosts,
+    required this.addPost,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +60,32 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.bookmark_border_sharp),
                   title: const Text('Saved'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SavedPosts(
+                          savedPosts: savedPosts,
+                          addPost: addPost,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.favorite_outline),
+                  title: const Text('Liked'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LikedPosts(
+                          savedPosts: savedPosts,
+                          addPost: addPost,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -75,40 +114,7 @@ class ProfilePage extends StatelessWidget {
                           );
                         },
                       ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: const [
-                                Text('125',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20)),
-                                Text('Posts')
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Text('235',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20)),
-                                Text('Followers')
-                              ],
-                            ),
-                            Column(
-                              children: const [
-                                Text('112',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20)),
-                                Text('Following')
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                      Statistics(),
                     ],
                   ),
                 ),
@@ -117,35 +123,8 @@ class ProfilePage extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: ProfileDescription(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    children: [
-                      ProfileButton(name: 'Edit profile'),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    children: const [
-                      ProfileButton(name: 'Promotions'),
-                      ProfileButton(name: 'Insights'),
-                      ProfileButton(name: 'Email'),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10.0),
-                  child: Row(
-                    children: const [
-                      StoryWidget(image: 'images/foto2.jpg', storyName: 'kyiv'),
-                      StoryWidget(
-                          image: 'images/foto3.jpg', storyName: 'moments'),
-                    ],
-                  ),
-                ),
+                ProfileButtons(),
+                Stories(),
                 const TabBar(tabs: [
                   Tab(
                     icon: Icon(Icons.grid_on),
@@ -154,50 +133,99 @@ class ProfilePage extends StatelessWidget {
                     icon: Icon(Icons.portrait_outlined),
                   )
                 ]),
-                Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: const [
-                        InstaPost(image: 'images/foto7.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto5.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto6.jpg'),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: const [
-                        InstaPost(image: 'images/foto8.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto9.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto4.jpg'),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: const [
-                        InstaPost(image: 'images/foto7.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto5.jpg'),
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 1)),
-                        InstaPost(image: 'images/foto6.jpg'),
-                      ],
-                    ),
-                  ),
-                ])
+                Posts()
               ],
             ),
           )),
+    );
+  }
+}
+
+class Stories extends StatelessWidget {
+  const Stories({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Row(
+        children: const [
+          StoryWidget(image: 'images/foto2.jpg', storyName: 'kyiv'),
+          StoryWidget(image: 'images/foto3.jpg', storyName: 'moments'),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileButtons extends StatelessWidget {
+  const ProfileButtons({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            children: [
+              ProfileButton(name: 'Edit profile'),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            children: const [
+              ProfileButton(name: 'Promotions'),
+              ProfileButton(name: 'Insights'),
+              ProfileButton(name: 'Email'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Statistics extends StatelessWidget {
+  const Statistics({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: const [
+              Text('125',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Text('Posts')
+            ],
+          ),
+          Column(
+            children: const [
+              Text('235',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Text('Followers')
+            ],
+          ),
+          Column(
+            children: const [
+              Text('112',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              Text('Following')
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -313,11 +341,11 @@ class InstaPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: InkWell(
-            onTap: (){},
-            child: Container(
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: InkWell(
+          onTap: () {},
+          child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(image),
