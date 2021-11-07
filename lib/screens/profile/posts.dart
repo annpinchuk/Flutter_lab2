@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lab2/screens/profile.dart';
+import 'package:lab2/screens/profile/profile.dart';
 
 class Posts extends StatelessWidget {
   const Posts({

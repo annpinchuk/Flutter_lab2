@@ -159,7 +159,6 @@ class LikeButton extends StatefulWidget {
 }
 
 class _LikeButtonState extends State<LikeButton> {
-  //bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {

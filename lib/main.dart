@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lab2/model/liked.dart';
-import 'package:lab2/screens/profile.dart';
+import 'package:lab2/screens/profile/profile.dart';
 import 'package:provider/provider.dart';
 
 import 'model/post_data.dart';

@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:lab2/model/post_data.dart';
-import 'package:lab2/widgets/posts.dart';
+import 'package:lab2/screens/profile/posts.dart';
 import 'package:lab2/widgets/saved_posts.dart';
 
-import '../widgets/liked_posts.dart';
+import '../../widgets/liked_posts.dart';
 
 class ProfilePage extends StatelessWidget {
   final List<PostData> savedPosts;
