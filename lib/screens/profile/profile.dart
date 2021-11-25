@@ -6,6 +6,7 @@ import 'package:lab2/screens/profile/posts.dart';
 import 'package:lab2/widgets/saved_posts.dart';
 
 import '../../widgets/liked_posts.dart';
+import 'animated_bar_chart.dart';
 
 class ProfilePage extends StatelessWidget {
   final List<PostData> savedPosts;
@@ -64,10 +65,11 @@ class ProfilePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SavedPosts(
-                          savedPosts: savedPosts,
-                          addPost: addPost,
-                        ),
+                        builder: (context) =>
+                            SavedPosts(
+                              savedPosts: savedPosts,
+                              addPost: addPost,
+                            ),
                       ),
                     );
                   },
@@ -79,10 +81,11 @@ class ProfilePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LikedPosts(
-                          savedPosts: savedPosts,
-                          addPost: addPost,
-                        ),
+                        builder: (context) =>
+                            LikedPosts(
+                              savedPosts: savedPosts,
+                              addPost: addPost,
+                            ),
                       ),
                     );
                   },
@@ -120,7 +123,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: ProfileDescription(),
                 ),
                 ProfileButtons(),
@@ -182,7 +185,8 @@ class ProfileButtons extends StatelessWidget {
           child: Row(
             children: const [
               ProfileButton(name: 'Promotions'),
-              ProfileButton(name: 'Insights'),
+              //ProfileButton(name: 'Insights'),
+              InsightsButton(),
               ProfileButton(name: 'Email'),
             ],
           ),
@@ -453,3 +457,46 @@ class ProfileButton extends StatelessWidget {
     );
   }
 }
+
+class InsightsButton extends StatelessWidget {
+  const InsightsButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: OutlinedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => InsightsScreen()));
+          },
+          child: Text('Insights'),
+        ),
+      ),
+    );
+  }
+}
+
+class InsightsScreen extends StatelessWidget {
+  const InsightsScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Insights')),
+      body: Column(
+        children: [
+          Center(child: ElevatedButton(onPressed: () {
+            Navigator.pop(context);
+          }, child: Text('Go back'))),
+          LogoApp(),
+        ],
+      ),
+
+    );
+  }
+}
+
