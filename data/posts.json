@@ -1,11 +1,8 @@
 [
   {
     "id": 1,
-    "user": {
-      "id": 1,
-      "userName": "annpinchuk",
-      "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg"
-    },
+    "username": "annpinchuk",
+    "userImageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg",
     "location": "Kyiv",
     "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto8.jpg",
     "likesNumber": 120,
@@ -13,11 +10,8 @@
   },
   {
     "id": 2,
-    "user": {
-      "id": 1,
-      "userName": "annpinchuk",
-      "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg"
-    },
+    "username": "annpinchuk",
+    "userImageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg",
     "location": "Kharkiv",
     "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto2.jpg",
     "likesNumber": 100,
@@ -25,11 +19,8 @@
   },
   {
     "id": 3,
-    "user": {
-      "id": 1,
-      "userName": "annpinchuk",
-      "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg"
-    },
+    "username": "annpinchuk",
+    "userImageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto1.jpg",
     "location": "Ukraine",
     "imageUrl": "https://raw.githubusercontent.com/annpinchuk/Flutter_lab2/master/images/foto3.jpg",
     "likesNumber": 150,
