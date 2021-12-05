@@ -6,15 +6,15 @@ import 'package:provider/provider.dart';
 import '../model/post_data.dart';
 
 class Post extends StatelessWidget {
-  final Function addPost;
+  final Function? addPost;
   final PostData postData;
-  final List<PostData> savedPosts;
+  final List<PostData>? savedPosts;
 
   const Post({
     Key? key,
     required this.postData,
-    required this.savedPosts,
-    required this.addPost,
+    this.savedPosts,
+    this.addPost,
   }) : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class Post extends StatelessWidget {
           PostPhoto(image: postData.imagePath),
           PostBottom(
             likesNumber: postData.likesNumber,
-            time: postData.time,
+            time: postData.postingTime,
             addPost: addPost,
             postData: postData,
             savedPosts: savedPosts,
@@ -49,7 +49,9 @@ class PostPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: AssetImage(image),
+      image: image.startsWith('https://')
+          ? NetworkImage(image)
+          : AssetImage(image) as ImageProvider,
       height: 500,
       width: double.infinity,
       fit: BoxFit.cover,
@@ -60,17 +62,17 @@ class PostPhoto extends StatelessWidget {
 class PostBottom extends StatelessWidget {
   final int likesNumber;
   final int time;
-  final Function addPost;
+  final Function? addPost;
   final PostData postData;
-  final List<PostData> savedPosts;
+  final List<PostData>? savedPosts;
 
   const PostBottom({
     Key? key,
     required this.likesNumber,
     required this.time,
-    required this.addPost,
+    this.addPost,
     required this.postData,
-    required this.savedPosts,
+    this.savedPosts,
   }) : super(key: key);
 
   @override
@@ -107,7 +109,7 @@ class PostBottom extends StatelessWidget {
                   textScaleFactor: 1.1,
                 ),
                 Text(
-                  '${time} day ago',
+                  '${time} days ago',
                   style: TextStyle(color: Colors.grey),
                 )
               ],
@@ -120,15 +122,15 @@ class PostBottom extends StatelessWidget {
 }
 
 class SaveButton extends StatefulWidget {
-  final Function addPost;
+  final Function? addPost;
   final PostData postData;
-  final List<PostData> savedPosts;
+  final List<PostData>? savedPosts;
 
   const SaveButton({
     Key? key,
-    required this.addPost,
+    this.addPost,
     required this.postData,
-    required this.savedPosts,
+    this.savedPosts,
   }) : super(key: key);
 
   @override
@@ -138,9 +140,9 @@ class SaveButton extends StatefulWidget {
 class _SaveButtonState extends State<SaveButton> {
   @override
   Widget build(BuildContext context) {
-    bool isSaved = widget.savedPosts.contains(widget.postData);
+    bool isSaved = widget.savedPosts?.contains.call(widget.postData) ?? false;
     return IconButton(
-        onPressed: () => {widget.addPost(widget.postData)},
+        onPressed: () => widget.addPost?.call(widget.postData),
         icon:
             Icon(isSaved ? Icons.bookmark_sharp : Icons.bookmark_border_sharp));
   }
@@ -159,7 +161,6 @@ class LikeButton extends StatefulWidget {
 }
 
 class _LikeButtonState extends State<LikeButton> {
-
   @override
   Widget build(BuildContext context) {
     var isLiked = context.select<LikedModel, bool>(
@@ -190,7 +191,9 @@ class PostHeader extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         //backgroundColor: Colors.pink,
-        backgroundImage: AssetImage(userImagePath),
+        backgroundImage: userImagePath.startsWith('https://')
+            ? NetworkImage(userImagePath)
+            : AssetImage(userImagePath) as ImageProvider,
       ),
       title: Text('${username}',
           style: const TextStyle(

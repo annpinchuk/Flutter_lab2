@@ -2,15 +2,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:lab2/model/liked.dart';
+import 'package:lab2/screens/post_page.dart';
 import 'package:lab2/screens/profile/profile.dart';
 import 'package:provider/provider.dart';
 
 import 'model/post_data.dart';
+import 'model/theme_model.dart';
 import 'screens/feed.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => LikedModel(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => LikedModel(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ThemeModel(),
+      ),
+    ],
     child: MyApp(),
   ));
 }
@@ -24,20 +33,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int index = 4;
-  static final List dataPosts = [
-    PostData('username1', 'images/foto5.jpg', 'Kyiv, Ukraine',
-        'images/foto1.jpg', 100, 2),
-    PostData(
-        'username2', 'images/foto6.jpg', 'Kyiv', 'images/foto2.jpg', 120, 2),
-    PostData(
-        'username3', 'images/foto7.jpg', 'Ukraine', 'images/foto3.jpg', 30, 2),
-    PostData(
-        'username4', 'images/foto8.jpg', 'Lviv', 'images/foto4.jpg', 215, 2),
-  ];
 
   List<PostData> savedPosts = [];
 
   late PageController pageController;
+
 
   @override
   void initState() {
@@ -68,10 +68,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode =
+        context.select<ThemeModel, ThemeMode>((theme) => theme.themeMode);
+
     return MaterialApp(
       title: 'Flutter Demo',
+      routes: {
+        '/postPage': (context) => PostPage(),
+      },
       darkTheme: ThemeData(
         // ignore: deprecated_member_use
+        //primarySwatch: Colors.grey,
         accentColor: Colors.grey,
         brightness: Brightness.dark,
         outlinedButtonTheme: OutlinedButtonThemeData(
@@ -80,7 +87,17 @@ class _MyAppState extends State<MyApp> {
               side: const BorderSide(width: 0.5, color: Colors.white)),
         ),
       ),
-      themeMode: ThemeMode.dark,
+      theme: ThemeData(
+        //accentColor: Colors.blueGrey,
+        primarySwatch: Colors.grey,
+        brightness: Brightness.light,
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+              primary: Colors.black,
+              side: const BorderSide(width: 0.5, color: Colors.grey)),
+        ),
+      ),
+      themeMode: themeMode,
       home: Scaffold(
         key: _scaffoldKey,
         body: SizedBox.expand(
@@ -91,7 +108,7 @@ class _MyAppState extends State<MyApp> {
             },
             children: [
               Feed(
-                  postsData: dataPosts,
+                  postsData: postsData,
                   addPost: toggleSavedPost,
                   savedPosts: savedPosts),
               Center(child: Text('Search')),
@@ -111,7 +128,7 @@ class _MyAppState extends State<MyApp> {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: const Color(0xFFFFFFFF),
+          selectedItemColor: Theme.of(context).textTheme.bodyText1!.color,
           currentIndex: index,
           onTap: onTap,
           items: const [

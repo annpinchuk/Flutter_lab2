@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:lab2/model/post_data.dart';
+import 'package:lab2/model/theme_model.dart';
 import 'package:lab2/screens/profile/posts.dart';
 import 'package:lab2/widgets/saved_posts.dart';
+import 'package:provider/src/provider.dart';
 
 import '../../widgets/liked_posts.dart';
-import 'insights.dart';
+import '../insights.dart';
+import '../post_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final List<PostData> savedPosts;
@@ -88,6 +91,7 @@ class ProfilePage extends StatelessWidget {
                     );
                   },
                 ),
+                ToggleThemeButton(),
               ],
             ),
           ),
@@ -134,10 +138,30 @@ class ProfilePage extends StatelessWidget {
                     icon: Icon(Icons.portrait_outlined),
                   )
                 ]),
-                Posts()
+                Posts(),
               ],
             ),
           )),
+    );
+  }
+}
+
+class ToggleThemeButton extends StatelessWidget {
+  const ToggleThemeButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeMode =
+        context.select<ThemeModel, ThemeMode>((theme) => theme.themeMode);
+
+    return SwitchListTile(
+      title: Text("Dark Mode"),
+      onChanged: (value) {
+        context.read<ThemeModel>().changeThemeMode(value);
+      },
+      value: themeMode == ThemeMode.dark,
     );
   }
 }
@@ -332,34 +356,7 @@ class ProfileAvatar extends StatelessWidget {
   }
 }
 
-class InstaPost extends StatelessWidget {
-  final String image;
 
-  const InstaPost({
-    Key? key,
-    required this.image,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: InkWell(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class ProfileDescription extends StatelessWidget {
   const ProfileDescription({
@@ -388,7 +385,7 @@ class ProfileDescription extends StatelessWidget {
         ),
         Text(
           'annpinchuk.com',
-          style: TextStyle(color: Colors.cyan[50]),
+          style: TextStyle(color: Colors.blueGrey),
         ),
         const Text(
           'view translation',
@@ -468,8 +465,12 @@ class InsightsButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: OutlinedButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Insights()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Insights(
+                          userName: 'annpinchuk',
+                        )));
           },
           child: Text('Insights'),
         ),
@@ -477,5 +478,3 @@ class InsightsButton extends StatelessWidget {
     );
   }
 }
-
-
